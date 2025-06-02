@@ -32,9 +32,9 @@ module Metasploit
         end
       end
 
-      VERSION = "6.4.57"
+      VERSION = "6.4.67"
       MAJOR, MINOR, PATCH = VERSION.split('.').map { |x| x.to_i }
-      PRERELEASE = 'ANDRAX-NG Edition'
+      PRERELEASE = 'ANDRAX-NG'
       HASH = get_hash
     end
 

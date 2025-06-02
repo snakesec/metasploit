@@ -19,10 +19,9 @@ module Rex
 
         #
         # Creates a new client instance
-        # @param http_trace_proc_request [Proc] A proc object passed to log HTTP requests if HTTP-Trace is set
-        # @param http_trace_proc_response [Proc] A proc object passed to log HTTP responses if HTTP-Trace is set
         #
-        def initialize(host, port = 80, context = {}, ssl = nil, ssl_version = nil, proxies = nil, username = '', password = '', kerberos_authenticator: nil, comm: nil, subscriber: nil)
+        # @param [Rex::Proto::Http::HttpSubscriber] subscriber A subscriber to Http requests/responses
+        def initialize(host, port = 80, context = {}, ssl = nil, ssl_version = nil, proxies = nil, username = '', password = '', kerberos_authenticator: nil, comm: nil, subscriber: nil, sslkeylogfile: nil)
           self.hostname = host
           self.port = port.to_i
           self.context = context
@@ -34,6 +33,7 @@ module Rex
           self.kerberos_authenticator = kerberos_authenticator
           self.comm = comm
           self.subscriber = subscriber || HttpSubscriber.new
+          self.sslkeylogfile = sslkeylogfile
 
           # Take ClientRequest's defaults, but override with our own
           self.config = Http::ClientRequest::DefaultConfig.merge({
@@ -183,6 +183,7 @@ module Rex
             'Context' => context,
             'SSL' => ssl,
             'SSLVersion' => ssl_version,
+            'SSLKeyLogFile' => sslkeylogfile,
             'Proxies' => proxies,
             'Timeout' => timeout,
             'Comm' => comm
@@ -728,6 +729,12 @@ module Rex
         attr_accessor :ssl, :ssl_version # :nodoc:
 
         attr_accessor :hostname, :port # :nodoc:
+
+        #
+        # The SSL key log file for the connected socket.
+        #
+        # @return [String]
+        attr_accessor :sslkeylogfile
 
         #
         # The established NTLM connection info
